@@ -41,4 +41,4 @@ if model is not None:
         prediction = model.predict(features)
 
         # Display prediction
-        st.write(f'The predicted energy price for{country} for the date {month}/{year} is {prediction[0]}')
+        st.write(f'The predicted energy price for {country} for the date {day}/{month}/{year} is ${prediction[0]}')
