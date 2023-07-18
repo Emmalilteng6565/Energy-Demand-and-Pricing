@@ -28,7 +28,7 @@ if model is not None:
     st.title('Energy Price Prediction App')
 
     # User input
-    year = st.selectbox('Year', list(range(2000, 2025)))
+    year = st.selectbox('Year', list(range(2023, 2024, 2025)))
     month = st.selectbox('Month', list(range(1, 13)))
     day = st.slider('Day', 1, 31)
     country = st.selectbox('Country', countries)
