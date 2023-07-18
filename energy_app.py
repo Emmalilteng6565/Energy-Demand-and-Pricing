@@ -5,12 +5,13 @@ from sklearn.ensemble import RandomForestRegressor
 from joblib import load
 
 
-countries = ['Austria', 'Belgium', 'Bulgaria', 'Switzerland', 'Czechia',
-       'Germany', 'Denmark', 'Spain', 'Estonia', 'Finland', 'France',
-       'Greece', 'Croatia', 'Hungary', 'Ireland', 'Italy', 'Lithuania',
-       'Luxembourg', 'Latvia', 'North Macedonia', 'Netherlands', 'Norway',
-       'Poland', 'Portugal', 'Romania', 'Serbia', 'Slovakia', 'Slovenia',
-       'Sweden']
+countries = [ 57.54058256,  46.69267472,  71.52281789,  73.93226211,
+        91.81232862,  90.00960067, 104.46860823,  67.73344955,
+        84.24664738,  69.40521539,  53.74111835,  66.41854184,
+        74.53456737,  96.99191778,  72.58268036,  72.58346566,
+        75.16897192,  77.15773591,  82.26388317,  83.90998991,
+        75.84687003,  65.69469277,  81.691089  ,  67.22618391,
+        69.77377764,  49.17303124,  77.85180908,  91.67756288]
 
 # Function to load the trained model
 def load_model(path):
