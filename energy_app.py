@@ -1,44 +1,52 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from sklearn.ensemble import RandomForestRegressor
-from joblib import load
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.preprocessing import StandardScaler
+import joblib
 
+# Load the trained models
+gb_demand_model = joblib.load('gb_demand_model.joblib')
+gb_price_model = joblib.load('gb_price_model.joblib')
 
-countries = [ 57.54058256,  46.69267472,  71.52281789,  73.93226211,
-        91.81232862,  90.00960067, 104.46860823,  67.73344955,
-        84.24664738,  69.40521539,  53.74111835,  66.41854184,
-        74.53456737,  96.99191778,  72.58268036,  72.58346566,
-        75.16897192,  77.15773591,  82.26388317,  83.90998991,
-        75.84687003,  65.69469277,  81.691089  ,  67.22618391,
-        69.77377764,  49.17303124,  77.85180908,  91.67756288]
+# Load the Scaler
+scaler = joblib.load('scaler.joblib')
 
-# Function to load the trained model
-def load_model(path):
-    try:
-        return load(path)
-    except Exception as e:
-        st.error(f"Error loading model: {e}")
-        return None
+# Define the Streamlit app
+def main():
+    # Title
+    st.title("Energy Demand and Price Prediction")
 
-# Load the trained model
-model = load_model('model.joblib')
+    # Input features
+    rainfall = st.slider('Rainfall', min_value=0.0, max_value=50.0, step=0.1)
+    solar_exposure = st.slider('Solar Exposure', min_value=0.0, max_value=50.0, step=0.1)
+    school_day = st.selectbox('School Day (1: Yes, 0: No)', options=[1, 0])
+    holiday = st.selectbox('Holiday (1: Yes, 0: No)', options=[1, 0])
+    day = st.selectbox('Day of the Month', options=list(range(1,32)))
+    month = st.selectbox('Month', options=list(range(1,13)))
+    year = st.selectbox('Year', options=list(range(2010, 2024)))
 
-if model is not None:
-    st.title('Energy Price Prediction App')
+    # Create a dataframe from the inputs
+    input_data = {'rainfall': [rainfall], 'solar_exposure': [solar_exposure], 'school_day': [school_day], 
+                  'holiday': [holiday], 'day': [day], 'month': [month], 'year': [year]}
+    input_df = pd.DataFrame(input_data)
 
-    # User input
-    year = st.selectbox('Year', list(range(2022, 2025)))
-    month = st.selectbox('Month', list(range(1, 13)))
-    day = st.slider('Day', 1, 31)
-    country = st.selectbox('Country', countries)
+    # Scale the input data
+    input_df_scaled = scaler.transform(input_df)
 
-    if st.button('Predict'):
-        # Prepare the feature vector for prediction
-        features = np.array([[year, month,day,country]])
+    # Make a demand prediction
+    demand_prediction = gb_demand_model.predict(input_df_scaled)[0]
+    st.write(f"Predicted Demand: {demand_prediction} MWh")
 
-        # Make prediction
-        prediction = model.predict(features)
+    # Add the demand prediction to the input data
+    input_df['demand'] = [demand_prediction]
 
-        # Display prediction
-        st.write(f'The predicted energy price for {country} for the date {day}/{month}/{year} is ${prediction[0]}')
+    # Scale the input data with the demand prediction
+    input_df_scaled = scaler.transform(input_df)
+
+    # Make a price prediction
+    price_prediction = gb_price_model.predict(input_df_scaled)[0]
+    st.write(f"Predicted Price: {price_prediction} AUD/MWh")
+
+if __name__ == "__main__":
+    main()
