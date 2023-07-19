@@ -4,13 +4,16 @@ import numpy as np
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.preprocessing import StandardScaler
 import joblib
+import pickle
+
 
 # Load the trained models
 gb_demand_model = joblib.load('gb_demand_model.joblib')
 gb_price_model = joblib.load('gb_price_model.joblib')
 
 # Load the Scaler
-scaler = joblib.load('scaler.pkl')
+with open('scaler_demand.pkl', 'rb') as f:
+    scaler_demand = pickle.load(f)
 
 # Define the Streamlit app
 def main():
