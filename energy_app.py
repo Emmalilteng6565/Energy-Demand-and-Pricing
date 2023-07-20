@@ -35,22 +35,28 @@ def main():
                   'holiday': [holiday], 'day': [day], 'month': [month], 'year': [year]}
     input_df = pd.DataFrame(input_data)
 
-    # Scale the input data for demand prediction
-    input_df_scaled_demand = scaler_demand.transform(input_df)
+    demand_predicted = False
 
-    # Make a demand prediction
-    demand_prediction = gb_demand_model.predict(input_df_scaled_demand)[0]
-    st.write(f"Predicted Demand: {demand_prediction} MWh")
+    if st.button('Predict Demand'):
+        # Scale the input data for demand prediction
+        input_df_scaled_demand = scaler_demand.transform(input_df)
 
-    # Add the demand prediction to the input data for price prediction
-    input_df['demand'] = [demand_prediction]
+        # Make a demand prediction
+        demand_prediction = gb_demand_model.predict(input_df_scaled_demand)[0]
+        st.write(f"Predicted Demand: {demand_prediction} MWh")
 
-    # Scale the input data for price prediction
-    input_df_scaled_price = scaler_price.transform(input_df)
+        # Add the demand prediction to the input data for price prediction
+        input_df['demand'] = [demand_prediction]
 
-    # Make a price prediction
-    price_prediction = gb_price_model.predict(input_df_scaled_price)[0]
-    st.write(f"Predicted Price: {price_prediction} AUD/MWh")
+        demand_predicted = True
+
+    if demand_predicted and st.button('Predict Price'):
+        # Scale the input data for price prediction
+        input_df_scaled_price = scaler_price.transform(input_df)
+
+        # Make a price prediction
+        price_prediction = gb_price_model.predict(input_df_scaled_price)[0]
+        st.write(f"Predicted Price: {price_prediction} AUD/MWh")
 
 if __name__ == "__main__":
     main()
