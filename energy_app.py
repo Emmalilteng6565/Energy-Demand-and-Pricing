@@ -4,7 +4,6 @@ import numpy as np
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.preprocessing import StandardScaler
 import joblib
-import pickle
 
 # Load the trained models
 gb_demand_model = joblib.load('gb_demand_model.joblib')
@@ -22,8 +21,8 @@ def main():
     st.title("Energy Demand and Price Prediction")
 
     # Input features
-    rainfall = st.slider('Rainfall', min_value=0.0, max_value=50.0, step=0.1)
-    solar_exposure = st.slider('Solar Exposure', min_value=0.0, max_value=50.0, step=0.1)
+    rainfall = st.slider('Rainfall (mm)', min_value=0.0, max_value=50.0, step=0.1)
+    solar_exposure = st.slider('Solar Exposure (MJ/m^2)', min_value=0.0, max_value=50.0, step=0.1)
     school_day = st.selectbox('School Day (1: Yes, 0: No)', options=[1, 0])
     holiday = st.selectbox('Holiday (1: Yes, 0: No)', options=[1, 0])
     day = st.selectbox('Day of the Month', options=list(range(1,32)))
