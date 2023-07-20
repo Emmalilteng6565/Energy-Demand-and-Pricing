@@ -35,8 +35,6 @@ def main():
                   'holiday': [holiday], 'day': [day], 'month': [month], 'year': [year]}
     input_df = pd.DataFrame(input_data)
 
-    demand_predicted = False
-
     if st.button('Predict Demand'):
         # Scale the input data for demand prediction
         input_df_scaled_demand = scaler_demand.transform(input_df)
@@ -48,9 +46,7 @@ def main():
         # Add the demand prediction to the input data for price prediction
         input_df['demand'] = [demand_prediction]
 
-        demand_predicted = True
-
-    if demand_predicted and st.button('Predict Price'):
+    if st.button('Predict Price'):
         # Scale the input data for price prediction
         input_df_scaled_price = scaler_price.transform(input_df)
 
