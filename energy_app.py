@@ -28,7 +28,7 @@ def main():
     holiday = st.selectbox('Holiday (1: Yes, 0: No)', options=[1, 0])
     day = st.selectbox('Day of the Month', options=list(range(1,32)))
     month = st.selectbox('Month', options=list(range(1,13)))
-    year = st.selectbox('Year', options=list(range(2010, 2024)))
+    year = st.selectbox('Year', options=list(range(2020, 2030)))
 
     # Create a dataframe from the inputs
     input_data = {'rainfall': [rainfall], 'solar_exposure': [solar_exposure], 'school_day': [school_day], 
