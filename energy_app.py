@@ -11,10 +11,10 @@ gb_demand_model = joblib.load('gb_demand_model.joblib')
 gb_price_model = joblib.load('gb_price_model.joblib')
 
 # Load the Scalers
-with open('scaler_demand.pkl', 'rb') as f:
-    scaler_demand = pickle.load(f)
-with open('scaler_price.pkl', 'rb') as f:
-    scaler_price = pickle.load(f)
+with open('scaler_demand.joblib', 'rb') as f:
+    scaler_demand = joblib.load(f)
+with open('scaler_price.joblib', 'rb') as f:
+    scaler_price = joblib.load(f)
 
 # Define the Streamlit app
 def main():
