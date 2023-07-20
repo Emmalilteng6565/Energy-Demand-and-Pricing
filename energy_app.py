@@ -6,14 +6,15 @@ from sklearn.preprocessing import StandardScaler
 import joblib
 import pickle
 
-
 # Load the trained models
 gb_demand_model = joblib.load('gb_demand_model.joblib')
 gb_price_model = joblib.load('gb_price_model.joblib')
 
-# Load the Scaler
-with open('scaler_demand.joblib', 'rb') as f:
-    scaler_demand = joblib.load(f)
+# Load the Scalers
+with open('scaler_demand.pkl', 'rb') as f:
+    scaler_demand = pickle.load(f)
+with open('scaler_price.pkl', 'rb') as f:
+    scaler_price = pickle.load(f)
 
 # Define the Streamlit app
 def main():
@@ -34,21 +35,21 @@ def main():
                   'holiday': [holiday], 'day': [day], 'month': [month], 'year': [year]}
     input_df = pd.DataFrame(input_data)
 
-    # Scale the input data
-    input_df_scaled = scaler.transform(input_df)
+    # Scale the input data for demand prediction
+    input_df_scaled_demand = scaler_demand.transform(input_df)
 
     # Make a demand prediction
-    demand_prediction = gb_demand_model.predict(input_df_scaled)[0]
+    demand_prediction = gb_demand_model.predict(input_df_scaled_demand)[0]
     st.write(f"Predicted Demand: {demand_prediction} MWh")
 
-    # Add the demand prediction to the input data
+    # Add the demand prediction to the input data for price prediction
     input_df['demand'] = [demand_prediction]
 
-    # Scale the input data with the demand prediction
-    input_df_scaled = scaler.transform(input_df)
+    # Scale the input data for price prediction
+    input_df_scaled_price = scaler_price.transform(input_df)
 
     # Make a price prediction
-    price_prediction = gb_price_model.predict(input_df_scaled)[0]
+    price_prediction = gb_price_model.predict(input_df_scaled_price)[0]
     st.write(f"Predicted Price: {price_prediction} AUD/MWh")
 
 if __name__ == "__main__":
